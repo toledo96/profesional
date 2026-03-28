@@ -1,22 +1,26 @@
 package com.practice.project.mappers;
 
-import com.practice.project.dtos.response.PaqueteDto;
+import com.practice.project.dtos.request.PaqueteRequestDto;
+import com.practice.project.dtos.response.PaqueteResponseDto;
 import com.practice.project.models.Paquete;
+import com.practice.project.models.Pedido;
 
 
 public class PaqueteMapper {
 
-    public static PaqueteDto toDto(Paquete paquete){
-        PaqueteDto paqueteDto = new PaqueteDto();
-        paqueteDto.setPaquete_id(paquete.getPaquete_id());
-        paqueteDto.setTamanio(paquete.getTamanio());
-        return paqueteDto;
+    // 📤 Entity → Response DTO
+    public static PaqueteResponseDto toDto(Paquete paquete) {
+        PaqueteResponseDto dto = new PaqueteResponseDto();
+        dto.setPaquete_id(paquete.getPaquete_id());
+        dto.setTamanio(paquete.getTamanio());
+        return dto;
     }
 
-    public static Paquete toEntity(PaqueteDto paqueteDto){
+    // 📥 Request DTO → Entity
+    public static Paquete toEntity(PaqueteRequestDto dto, Pedido pedido) {
         Paquete paquete = new Paquete();
-        paquete.setPaquete_id(paqueteDto.getPaquete_id());
-        paquete.setTamanio(paquete.getTamanio());
+        paquete.setTamanio(dto.getTamanio());
+        paquete.setPedido(pedido); // 🔥 relación se setea aquí
         return paquete;
     }
 

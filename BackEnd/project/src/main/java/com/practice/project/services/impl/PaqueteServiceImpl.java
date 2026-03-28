@@ -1,37 +1,54 @@
 package com.practice.project.services.impl;
 
-import com.practice.project.dtos.response.PaqueteDto;
+import com.practice.project.dtos.request.PaqueteRequestDto;
+import com.practice.project.dtos.response.PaqueteResponseDto;
 import com.practice.project.exceptions.PaqueteNotFoundException;
+import com.practice.project.exceptions.PedidoNotFoundException;
 import com.practice.project.mappers.PaqueteMapper;
 import com.practice.project.models.Paquete;
+import com.practice.project.models.Pedido;
 import com.practice.project.repositories.PaqueteRepository;
+import com.practice.project.repositories.PedidoRepository;
 import com.practice.project.services.PaqueteService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PaqueteServiceImpl implements PaqueteService {
 
     private final PaqueteRepository paqueteRepository;
+    private final PedidoRepository pedidoRepository;
 
     @Override
-    public PaqueteDto createPaquete(Paquete paquete) {
-        Paquete paquete_guardado = paqueteRepository.save(paquete);
-        return PaqueteMapper.toDto(paquete_guardado);
+    public PaqueteResponseDto createPaquete(PaqueteRequestDto dto) {
+        Pedido pedido = pedidoRepository.findById(dto.getPedidoId())
+                .orElseThrow(() -> new PedidoNotFoundException(dto.getPedidoId()));
+
+        Paquete paquete = PaqueteMapper.toEntity(dto, pedido);
+
+        Paquete saved = paqueteRepository.save(paquete);
+
+        return PaqueteMapper.toDto(saved);
     }
 
     @Override
-    public PaqueteDto updatePaquete(Long id,Paquete paquete) {
-        Paquete paquete_encontrado = paqueteRepository.findById(id)
-                .orElseThrow(() -> new PaqueteNotFoundException(paquete.getPaquete_id()));
-        paquete_encontrado.setTamanio(paquete.getTamanio());
-        Paquete actualizado = paqueteRepository.save(paquete_encontrado);
+    public PaqueteResponseDto updatePaquete(Long id, PaqueteRequestDto paqueteDto) {
+        Paquete paqueteEncontrado = paqueteRepository.findById(id)
+                .orElseThrow(() -> new PaqueteNotFoundException(id));
+        paqueteEncontrado.setTamanio(paqueteDto.getTamanio());
+
+        if(paqueteDto.getPedidoId() != null){
+            Pedido pedido = pedidoRepository.findById(paqueteDto.getPedidoId())
+                    .orElseThrow(() -> new PedidoNotFoundException(paqueteDto.getPedidoId()));
+            paqueteEncontrado.setPedido(pedido);
+        }
+        Paquete actualizado = paqueteRepository.save(paqueteEncontrado);
         return PaqueteMapper.toDto(actualizado);
     }
 
     @Override
-    public PaqueteDto getPaquete(Long paquete_id) {
+    public PaqueteResponseDto getPaquete(Long paquete_id) {
         Paquete paquete1 = paqueteRepository.findById(paquete_id)
                 .orElseThrow(() -> new PaqueteNotFoundException(paquete_id));
         return PaqueteMapper.toDto(paquete1);
@@ -39,6 +56,9 @@ public class PaqueteServiceImpl implements PaqueteService {
 
     @Override
     public void deletePaquete(Long paquete_id) {
-        paqueteRepository.deleteById(paquete_id);
+        Paquete paquete = paqueteRepository.findById(paquete_id)
+                .orElseThrow(() -> new PaqueteNotFoundException(paquete_id));
+
+        paqueteRepository.delete(paquete);
     }
 }
