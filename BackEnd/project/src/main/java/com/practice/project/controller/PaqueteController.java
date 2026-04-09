@@ -6,6 +6,7 @@ import com.practice.project.models.Paquete;
 import com.practice.project.services.PaqueteService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class PaqueteController {
     @PostMapping
     public ResponseEntity<PaqueteResponseDto> create(@Valid @RequestBody PaqueteRequestDto paqueteDto) {
         PaqueteResponseDto paquete1 = paqueteService.createPaquete(paqueteDto);
-        return ResponseEntity.status(201).body(paquete1);
+        return ResponseEntity.status(HttpStatus.CREATED).body(paquete1);
     }
 
     @PutMapping("/{id}")
