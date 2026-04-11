@@ -10,11 +10,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarritoProductoResponseDto {
-    private long carritoProductoId;
-
+    private Long carritoProductoId; // ID generado por la BD
+    private Long carritoId;
+    private Long productoId;
+    private String nombreProducto;
+    private Double precioUnitario;
     private Integer cantidad;
 
-    private Carrito carrito;
 
-    private Producto producto;
 }

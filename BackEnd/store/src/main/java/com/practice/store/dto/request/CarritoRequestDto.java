@@ -8,14 +8,19 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarritoRequestDto {
+        /*
+        - Request DTOs → sin ID (porque el cliente no lo define).
+        - Response DTOs → con ID (porque el servidor lo devuelve al cliente).
 
-    private long idCarrito;
+    */
+
 
     private List<CarritoProducto> productos = new ArrayList<>();
 

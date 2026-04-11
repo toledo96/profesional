@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductoResponseDto {
-    private long idProducto;
+    private Long idProducto;
 
     private String nombreProducto;
 

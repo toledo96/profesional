@@ -2,7 +2,6 @@ package com.practice.store.dto.request;
 
 import com.practice.store.model.Carrito;
 import com.practice.store.model.Producto;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 @Getter
@@ -12,12 +11,14 @@ import lombok.*;
 @AllArgsConstructor
 public class CarritoProductoRequestDto {
 
-    private long carritoProductoId;
 
+ /*
+   Cuando hablamos de una entidad intermedia como , el cliente necesita indicar a qué carrito y qué producto se refiere.
+ */
+
+    private Long carritoId;
+    private Long productoId;
     private Integer cantidad;
 
-    private Carrito carrito;
-
-    private Producto producto;
 
 }

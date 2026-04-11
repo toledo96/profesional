@@ -17,7 +17,7 @@ public class Carrito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idCarrito;
+    private Long idCarrito;
 
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
     private List<CarritoProducto> productos = new ArrayList<>();

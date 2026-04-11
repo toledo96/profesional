@@ -29,9 +29,7 @@ public class CarritoProducto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long carritoProductoId;
-
-    private Integer cantidad;
+    private Long carritoProductoId;
 
     @ManyToOne
     private Carrito carrito;
@@ -39,5 +37,8 @@ public class CarritoProducto {
     @ManyToOne
     private Producto producto;
 
+    private Integer cantidad;
+
+    private Double precioUnitario; // precio en el momento de agregar
 
 }

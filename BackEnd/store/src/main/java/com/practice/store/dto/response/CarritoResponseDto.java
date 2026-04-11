@@ -15,8 +15,14 @@ import java.util.List;
 @AllArgsConstructor
 public class CarritoResponseDto {
 
-    private long idCarrito;
+    /*
+        - Request DTOs → sin ID (porque el cliente no lo define).
+        - Response DTOs → con ID (porque el servidor lo devuelve al cliente).
+
+    */
+
+    private Long idCarrito;
 
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
-    private List<CarritoProducto> productos = new ArrayList<>();
+    private List<CarritoProductoResponseDto> productos = new ArrayList<>();
 }
