@@ -22,6 +22,6 @@ public class CarritoRequestDto {
     */
 
 
-    private List<CarritoProducto> productos = new ArrayList<>();
+    private List<CarritoProductoRequestDto> productos = new ArrayList<>();
 
 }
