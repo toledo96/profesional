@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CarritoService {
 
-    CarritoResponseDto crearCarrito(CarritoRequestDto carritoRequestDto);
+    CarritoResponseDto crearCarrito(CarritoRequestDto carritoRequestDto,String requestId);
 
     CarritoResponseDto actualizarCarrito(CarritoRequestDto carritoRequestDto, Long carritoId);
 

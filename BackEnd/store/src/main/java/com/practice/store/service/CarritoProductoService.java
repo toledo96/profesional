@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CarritoProductoService {
 
-    CarritoProductoResponseDto agregarProducto(Long carritoId, Long productoId, Integer cantidad);
+    CarritoProductoResponseDto agregarProducto(Long carritoId, Long productoId, Integer cantidad, String requestId);
 
     CarritoProductoResponseDto actualizarCantidad(Long carritoProductoId, Integer nuevaCantidad);
 

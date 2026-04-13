@@ -13,7 +13,7 @@ public interface ProductoService {
         - Response DTO → para salida (mostrar datos al cliente).
     */
 
-    ProductoResponseDto crearProducto(ProductoRequestDto productoRequestDto);
+    ProductoResponseDto crearProducto(ProductoRequestDto productoRequestDto,String requestId);
 
     ProductoResponseDto actualizarProducto(ProductoRequestDto productoRequestDto, Long productoId);
 
