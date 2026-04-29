@@ -1,6 +1,8 @@
 package com.practice.store.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -32,13 +34,17 @@ public class CarritoProducto {
     private Long carritoProductoId;
 
     @ManyToOne
+    @NotNull
     private Carrito carrito;
 
     @ManyToOne
+    @NotNull
     private Producto producto;
 
+    @NotNull
     private Integer cantidad;
 
+    @NotNull
     private Double precioUnitario; // precio en el momento de agregar
 
 }

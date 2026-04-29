@@ -4,6 +4,7 @@ import com.practice.store.dto.request.CarritoRequestDto;
 import com.practice.store.dto.response.CarritoResponseDto;
 import com.practice.store.service.CarritoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class CarritoController {
             @RequestHeader("X-Request-Id") String requestId) {
 
         CarritoResponseDto response = carritoService.crearCarrito(carritoRequestDto, requestId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Actualizar carrito

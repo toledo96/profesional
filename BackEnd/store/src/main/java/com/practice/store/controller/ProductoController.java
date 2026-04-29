@@ -4,6 +4,7 @@ import com.practice.store.dto.request.ProductoRequestDto;
 import com.practice.store.dto.response.ProductoResponseDto;
 import com.practice.store.service.ProductoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +23,8 @@ public class ProductoController {
     public ResponseEntity<ProductoResponseDto> crearProducto(
             @RequestBody ProductoRequestDto productoRequestDto,
             @RequestHeader("X-Request-Id") String requestId) {
-
         ProductoResponseDto response = productoService.crearProducto(productoRequestDto, requestId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Actualizar producto

@@ -4,6 +4,7 @@ import com.practice.store.exception.CarritoNoEncontradoException;
 import com.practice.store.exception.CarritoProductoNoEncontradoException;
 import com.practice.store.exception.ErrorResponse;
 import com.practice.store.exception.ProductoNoEncontradoException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 @Slf4j
@@ -67,13 +69,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleGeneral(ConstraintViolationException  ex) {
         log.error("Unexpected error occurred: {}",ex);
 
+        String errores = ex.getConstraintViolations().stream()
+                .map(v -> v.getPropertyPath() + " :" + v.getMessage())
+                .collect(Collectors.joining("| "));
+
         return new ResponseEntity<>(
-                buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor"),
-                HttpStatus.INTERNAL_SERVER_ERROR
+                buildError(HttpStatus.INTERNAL_SERVER_ERROR, errores),
+                HttpStatus.BAD_REQUEST
         );
     }
 

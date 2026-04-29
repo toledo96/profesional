@@ -1,6 +1,7 @@
 package com.practice.store.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Carrito {
     private Long idCarrito;
 
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
+    @Size(min = 1, message = "Deben existir productos")
     private List<CarritoProducto> productos = new ArrayList<>();
 
 

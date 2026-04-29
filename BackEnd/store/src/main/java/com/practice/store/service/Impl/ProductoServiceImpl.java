@@ -29,15 +29,11 @@ public class ProductoServiceImpl implements ProductoService {
         if (Boolean.TRUE.equals(redisTemplate.hasKey(requestId))) {
             return (ProductoResponseDto) redisTemplate.opsForValue().get(requestId);
         }
-
         // 2. Crear producto
         Producto producto = productoRepository.save(ProductoMapper.toEntity(productoRequestDto));
-
         ProductoResponseDto response = ProductoMapper.toDto(producto);
-
         // 3. Guardar resultado en Redis con TTL
         redisTemplate.opsForValue().set(requestId, response, Duration.ofMinutes(10));
-
         return response;
     }
 
@@ -49,6 +45,7 @@ public class ProductoServiceImpl implements ProductoService {
         producto.setNombreProducto(productoRequestDto.getNombreProducto());
         producto.setPrecio(productoRequestDto.getPrecio());
         producto.setCantidadStock(productoRequestDto.getCantidadStock());
+        productoRepository.save(producto);
         return ProductoMapper.toDto(producto);
     }
 

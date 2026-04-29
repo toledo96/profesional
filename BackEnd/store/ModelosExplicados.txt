@@ -1,0 +1,50 @@
+Productos (catálogo)
+
+GET /api/productos → listar productos.
+
+GET /api/productos/{productoId} → detalle de un producto.
+
+(Opcional) POST /api/productos, PUT /api/productos/{productoId}, DELETE /api/productos/{productoId} → solo si tu frontend permite crear/editar/eliminar productos (normalmente esto es parte de un panel de administración).
+
+
+
+Carrito
+
+POST /api/carritos → crear un carrito nuevo.
+
+GET /api/carritos/{carritoId} → obtener el carrito actual.
+
+PUT /api/carritos/{carritoId} → actualizar el carrito (ej. cambiar estado).
+
+DELETE /api/carritos/{carritoId} → eliminar carrito (checkout o vaciar).
+
+
+
+
+Productos dentro del carrito
+
+POST /carritos/{carritoId}/productos/{productoId} → agregar producto al carrito.
+
+PUT /carritos/{carritoId}/productos/{carritoProductoId} → actualizar cantidad de un producto en el carrito.
+
+DELETE /carritos/{carritoId}/productos/{carritoProductoId} → eliminar producto del carrito.
+
+GET /carritos/{carritoId}/productos → listar productos del carrito.
+
+GET /carritos/{carritoId}/productos/total → obtener el total del carrito.
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Frontend cliente (tienda):
+
+GET productos, GET producto por id, POST carrito, GET carrito, POST producto en carrito, PUT producto en carrito, DELETE producto en carrito, GET productos del carrito, GET total.
+
+
+
+
+Frontend admin (si lo construyes):
+
+POST producto, PUT producto, DELETE producto.
