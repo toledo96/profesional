@@ -16,10 +16,16 @@ public class RabbitConfig {
     public static final String EXCHANGE = "order.exchange";
     public static final String ROUTING_KEY = "order.created";
 
+    // DLQ
+    public static final String DLQ = "order.created.dlq";
+    public static final String DLX = "order.exchange.dlx";
+
     @Bean
     public Queue queue() {
         return new Queue(QUEUE,true);
     }
+
+
 
     @Bean
     public TopicExchange exchange() {
@@ -32,6 +38,23 @@ public class RabbitConfig {
                 .bind(queue())
                 .to(exchange())
                 .with(ROUTING_KEY);
+    }
+
+    @Bean
+    public Queue deadLetterQueue() {
+        return new Queue(DLQ, true);
+    }
+
+    @Bean
+    public TopicExchange deadLetterExchange() {
+        return new TopicExchange(DLX, true, false);
+    }
+
+    @Bean
+    public Binding dlqBinding() {
+        return BindingBuilder.bind(deadLetterQueue())
+                .to(deadLetterExchange())
+                .with("#");
     }
 
     @Bean

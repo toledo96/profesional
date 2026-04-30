@@ -11,6 +11,7 @@ import com.techi.microservices.order.repository.OrderRepository;
 import com.techi.microservices.order.service.OrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -43,8 +45,17 @@ public class OrderServiceImpl implements OrderService {
 
         Order saved = orderRepository.save(order);
 
+
+        try {
+            // Evento con RabbitMQ para publicar
+            orderProducer.sendOrderCreatedEvent(saved);
+        } catch (Exception e) {
+            // loggear error
+            log.info("error al enviar evento: {}" , e.getMessage());
+        }
+
         // Evento con RabbitMQ para publicar
-        orderProducer.sendOrderCreatedEvent(saved);
+
 
         return OrderMapping.toDto(saved);
     }

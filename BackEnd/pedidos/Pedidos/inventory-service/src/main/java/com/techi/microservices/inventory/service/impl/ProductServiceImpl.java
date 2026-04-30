@@ -1,9 +1,13 @@
 package com.techi.microservices.inventory.service.impl;
 
+import com.techi.microservices.inventory.dto.mapping.ProductMapping;
+import com.techi.microservices.inventory.dto.request.ProductRequest;
+import com.techi.microservices.inventory.dto.response.ProductResponse;
 import com.techi.microservices.inventory.model.Product;
 import com.techi.microservices.inventory.repository.ProductRepository;
 import com.techi.microservices.inventory.service.ProductoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,16 +23,34 @@ public class ProductServiceImpl implements ProductoService {
             throw new IllegalArgumentException("Cantidad inválida");
         }
 
-        Product product = productRepository.findByProductId(productId)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + productId));
+        int retries = 3;
 
-        if (product.getStock() < quantity) {
-            throw new RuntimeException("Stock insuficiente");
+        while(retries > 0){
+
+            try {
+
+                Product product = productRepository.findByProductId(productId)
+                        .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + productId));
+
+                if (product.getStock() < quantity) {
+                    throw new RuntimeException("Stock insuficiente");
+                }
+
+                product.setStock(product.getStock() - quantity);
+
+                productRepository.save(product);
+
+                return;
+
+
+            }catch (OptimisticLockingFailureException ex){
+                retries--;
+                if(retries == 0){
+                    throw new RuntimeException("Error de concurrencia, intenta de nuevo");
+                }
+            }
+
         }
-
-        product.setStock(product.getStock() - quantity);
-
-        productRepository.save(product);
     }
 
     @Override
@@ -47,14 +69,19 @@ public class ProductServiceImpl implements ProductoService {
     }
 
     @Override
-    public Product getByProductId(Long productId) {
-        return productRepository.findByProductId(productId)
+    public ProductResponse getByProductId(Long productId) {
+        Product product = productRepository.findByProductId(productId)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + productId));
+
+        return ProductMapping.toDto(product);
     }
 
     @Override
-    public Product createProduct(Product product) {
-        Product p =productRepository.save(product);
-        return p;
+    public ProductResponse createProduct(ProductRequest product) {
+        Product p =productRepository.save(ProductMapping.toEntity(product));
+        return ProductResponse.builder()
+                .name(product.getName())
+                .stock(product.getStock())
+                .build();
     }
 }
