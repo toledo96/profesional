@@ -25,7 +25,14 @@ public class ProductoController {
 
     // 🔹 Obtener producto por productId (NO por id de Mongo)
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long productId) {
+    public ResponseEntity<ProductResponse> getProduct(
+            @RequestHeader("X-Roles") String roles,
+            @PathVariable Long productId) {
+
+        if (!roles.contains("ADMIN")) {
+            throw new RuntimeException("No autorizado");
+        }
+
         return ResponseEntity.ok(productoService.getByProductId(productId));
     }
 
